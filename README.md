@@ -1,6 +1,6 @@
 # Event-Historical Causal Interpretability
 
-[Recency as Salience](https://standardgalactic.github.io/research-projects/interpretability/recency-as-salience.pdf)
+[Recency as Salience](https://standardgalactic.github.io/interpretability/papers/recency-as-salience/recency-as-salience.pdf)
 
 This repository presents a unified framework for understanding intelligence, AI systems, and complex knowledge structures through **event-history**, **irreversibility**, and **constraint**, rather than purely state-based or functional descriptions.
 
@@ -19,22 +19,22 @@ This perspective resolves puzzles in mechanistic interpretability such as substi
 The same ideas are presented at multiple levels of depth and form. Choose the entry point that matches your goal:
 
 ### Conceptual & Intuitive
-- **[analogy-guide.md](analogy-guide.md)**  
+- **[analogy-guide.md](generated/writing/analogy-guide.md)**  
   A simple, intuitive introduction using concrete analogies (games, tools, and everyday systems) to explain event-nodes vs. texture-nodes.
 
-- **[concept-explainer.md](concept-explainer.md)**  
+- **[concept-explainer.md](generated/writing/concept-explainer.md)**  
   A clear, non-technical explanation of worldhood, irreversibility, and why history matters for intelligence.
 
 ### Narrative & Public-Facing
-- **[blog-post.md](blog-post.md)**  
+- **[blog-post.md](generated/writing/blog-post.md)**  
   A readable essay-style presentation aimed at general technical audiences, connecting AI, philosophy, and system design.
 
 ### Strategic & Policy-Oriented
-- **[briefing-document.md](briefing-document.md)**  
+- **[briefing-document.md](generated/writing/briefing-document.md)**  
   A concise executive briefing framing the framework for AI safety, governance, and institutional resilience.
 
 ### Formal & Technical
-- **[technical-paper.md](technical-paper.md)**  
+- **[technical-paper.md](generated/writing/technical-paper.md)**  
   The full technical exposition: typed causal graphs, two-channel mediation, kernel histories, Spherepop/RSVP grounding, and applications to mechanistic interpretability.
 
 ## Unifying Thesis

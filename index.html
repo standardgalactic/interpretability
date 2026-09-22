@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FLYXION // INDEX</title>
+
+<style>
+:root {
+  --bg: #090909;
+  --fg: #d8d8cf;
+  --dim: #77776f;
+  --ghost: #33332f;
+  --hot: #ffffff;
+  --line: #505049;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  line-height: 1.45;
+  text-shadow: 0 0 5px rgba(255,255,255,.08);
+}
+
+/* CRT scanlines */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.018) 0,
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  z-index: 99;
+}
+
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 28px 80px;
+}
+
+header {
+  border-top: 2px solid var(--fg);
+  border-bottom: 1px solid var(--line);
+  padding: 18px 0 16px;
+  margin-bottom: 26px;
+}
+
+.brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+}
+
+h1 {
+  font-size: clamp(24px, 5vw, 54px);
+  line-height: .9;
+  letter-spacing: -.06em;
+  margin: 0;
+  font-weight: normal;
+}
+
+.serial {
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.subtitle {
+  margin-top: 13px;
+  color: var(--dim);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  margin: 25px 0 12px;
+}
+
+input, button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 0;
+}
+
+input {
+  width: 100%;
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--hot);
+}
+
+button {
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  color: var(--dim);
+  border-bottom: 1px dotted var(--ghost);
+  padding: 7px 0 14px;
+  margin-bottom: 15px;
+}
+
+#signal {
+  color: var(--fg);
+}
+
+.file {
+  display: grid;
+  grid-template-columns: 42px 1fr 70px;
+  gap: 12px;
+  padding: 7px 5px;
+  border-bottom: 1px dotted var(--ghost);
+  text-decoration: none;
+  color: var(--fg);
+  transition: none;
+}
+
+.file:hover,
+.file.selected {
+  background: var(--fg);
+  color: var(--bg);
+  text-shadow: none;
+}
+
+.number {
+  color: var(--dim);
+}
+
+.file:hover .number,
+.file.selected .number {
+  color: var(--bg);
+}
+
+.ext {
+  text-align: right;
+  color: var(--dim);
+}
+
+.file:hover .ext,
+.file.selected .ext {
+  color: var(--bg);
+}
+
+.directory {
+  margin: 28px 0 7px;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: .13em;
+}
+
+.directory::before {
+  content: "┌─ ";
+}
+
+.empty {
+  padding: 70px 0;
+  text-align: center;
+  color: var(--dim);
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  margin-top: 38px;
+  padding-top: 15px;
+  color: var(--dim);
+}
+
+.cursor {
+  display: inline-block;
+  width: .65em;
+  height: 1em;
+  vertical-align: -.15em;
+  background: var(--fg);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@media (max-width: 650px) {
+  .controls {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .controls input {
+    grid-column: 1 / -1;
+  }
+
+  .file {
+    grid-template-columns: 32px 1fr 45px;
+  }
+
+  .serial {
+    display: none;
+  }
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header>
+  <div class="brand">
+    <h1>FLYXION<br>INDEX</h1>
+    <div class="serial">ARCHIVE // 001</div>
+  </div>
+
+  <div class="subtitle">
+    research fragments · papers · machinery · residuals
+  </div>
+</header>
+
+<section class="controls">
+  <input
+    id="search"
+    autocomplete="off"
+    spellcheck="false"
+    placeholder="SEARCH THE FIELD..."
+    autofocus
+  >
+  <button id="random">random</button>
+  <button id="entropy">entropy</button>
+</section>
+
+<div class="status">
+  <span id="count"></span>
+  <span id="signal">SIGNAL: NOMINAL</span>
+</div>
+
+<div id="index"></div>
+
+<footer>
+  FLYXION PRESS // LOCAL KNOWLEDGE APPARATUS //
+  <span class="cursor"></span>
+</footer>
+
+</main>
+
+<script>
+/*
+   ---------------------------------------------------------
+   THE ARCHIVE
+
+   Add/remove entries here.
+
+   "path" is both the link and the displayed filename.
+   "group" controls the section heading.
+   ---------------------------------------------------------
+*/
+
+const FILES = [
+
+  { group: "PAPERS", path: "papers/causal-mechanistic-interpretability/causal-mechanistic-interpretability.pdf" },
+  { group: "PAPERS", path: "papers/causal-mediation/causal-mediation.pdf" },
+  { group: "PAPERS", path: "papers/event-nodes/event-nodes.pdf" },
+  { group: "PAPERS", path: "papers/from-inspection-to-intervention/from-inspection-to-intervention.pdf" },
+  { group: "PAPERS", path: "papers/mechanistic-interpretability/mechanistic-interpretability.pdf" },
+  { group: "PAPERS", path: "papers/recency-as-salience/recency-as-salience.pdf" },
+  { group: "PAPERS", path: "papers/the-limits-of-interpretability/the-limits-of-interpretability.pdf" },
+  { group: "PAPERS", path: "papers/two-channel-causal-mediation/two-channel-causal-mediation.pdf" },
+
+  { group: "SPHEREPOP", path: "spherepop/spherepop-mathematical-description.txt" },
+  { group: "SPHEREPOP", path: "spherepop/bnf-grammar-for-spherepop.txt" },
+  { group: "SPHEREPOP", path: "spherepop/spherepop-history-based-computation-foundations.txt" },
+
+  { group: "NOTES", path: "notes/active-geodesic-inference-reasoning-as-field-dynamics.txt" },
+  { group: "NOTES", path: "notes/attention-economy-as-geometric-field-dynamics.txt" },
+  { group: "NOTES", path: "notes/cp-and-ip-equivalence.txt" },
+  { group: "NOTES", path: "notes/forking-time-synthesis.txt" },
+  { group: "NOTES", path: "notes/paperclips-without-robots.txt" },
+  { group: "NOTES", path: "notes/person-byte-constraint-and-collective-cognition.txt" },
+  { group: "NOTES", path: "notes/substrate-independent-thinking-hypothesis.txt" },
+  { group: "NOTES", path: "notes/universal-hierarchy-of-life.txt" },
+
+  { group: "TOOLS", path: "tools/get-context.sh" },
+  { group: "TOOLS", path: "tools/extract-text.py" }
+];
+
+const index   = document.querySelector("#index");
+const search  = document.querySelector("#search");
+const count   = document.querySelector("#count");
+const signal  = document.querySelector("#signal");
+const random  = document.querySelector("#random");
+const entropy = document.querySelector("#entropy");
+
+let order = [...FILES];
+
+function extension(path) {
+  const m = path.match(/\.([^.]+)$/);
+  return m ? m[1].toUpperCase() : "—";
+}
+
+function basename(path) {
+  return path.split("/").pop();
+}
+
+function render() {
+  const query = search.value.trim().toLowerCase();
+
+  const visible = order.filter(file =>
+    file.path.toLowerCase().includes(query) ||
+    file.group.toLowerCase().includes(query)
+  );
+
+  count.textContent =
+    `${String(visible.length).padStart(3, "0")} / ` +
+    `${String(FILES.length).padStart(3, "0")} OBJECTS`;
+
+  signal.textContent =
+    query === ""
+      ? "SIGNAL: NOMINAL"
+      : visible.length
+        ? "SIGNAL: ACQUIRED"
+        : "SIGNAL: LOST";
+
+  index.innerHTML = "";
+
+  if (!visible.length) {
+    index.innerHTML =
+      `<div class="empty">
+         NO ADMISSIBLE OBJECT<br><br>
+         ∅
+       </div>`;
+    return;
+  }
+
+  let previousGroup = null;
+
+  visible.forEach((file, i) => {
+
+    if (file.group !== previousGroup) {
+      const heading = document.createElement("div");
+      heading.className = "directory";
+      heading.textContent = file.group;
+      index.appendChild(heading);
+      previousGroup = file.group;
+    }
+
+    const a = document.createElement("a");
+    a.className = "file";
+    a.href = file.path;
+
+    a.innerHTML = `
+      <span class="number">${String(i + 1).padStart(2, "0")}</span>
+      <span>${basename(file.path)}</span>
+      <span class="ext">${extension(file.path)}</span>
+    `;
+
+    index.appendChild(a);
+  });
+}
+
+search.addEventListener("input", render);
+
+/*
+   RANDOM ACCESS
+
+   Not "I'm feeling lucky." It chooses an actual object from
+   the currently admissible search result.
+*/
+random.addEventListener("click", () => {
+  const query = search.value.trim().toLowerCase();
+
+  const candidates = FILES.filter(file =>
+    file.path.toLowerCase().includes(query) ||
+    file.group.toLowerCase().includes(query)
+  );
+
+  if (!candidates.length) return;
+
+  const choice =
+    candidates[Math.floor(Math.random() * candidates.length)];
+
+  location.href = choice.path;
+});
+
+/*
+   ENTROPY MODE
+
+   Temporarily destroys categorical ordering.
+
+   The archive becomes a set of accidental adjacencies.
+*/
+entropy.addEventListener("click", () => {
+  order = [...FILES]
+    .map(value => ({ value, n: Math.random() }))
+    .sort((a, b) => a.n - b.n)
+    .map(x => x.value);
+
+  /*
+     Give every object the same pseudo-group so the shuffle
+     is visually continuous.
+  */
+  order = order.map(x => ({
+    ...x,
+    group: "ENTROPIC FIELD"
+  }));
+
+  signal.textContent = "SIGNAL: DECOHERENT";
+  render();
+});
+
+/*
+   Keyboard interface
+
+   /       search
+   Escape  clear / restore topology
+   ?       random object
+*/
+
+document.addEventListener("keydown", event => {
+
+  if (
+    event.key === "/" &&
+    document.activeElement !== search
+  ) {
+    event.preventDefault();
+    search.focus();
+  }
+
+  if (event.key === "Escape") {
+    search.value = "";
+    order = [...FILES];
+    search.blur();
+    render();
+  }
+
+  if (
+    event.key === "?" &&
+    document.activeElement !== search
+  ) {
+    random.click();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
